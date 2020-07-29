@@ -1,0 +1,3 @@
+   <a ui-sref="contacts.detail.item({itemId:item.id})">{{item.type}}</a>
+           
+   <a ui-sref="contacts.detail({contactId:contact.id})">{{contact.name}}</a>

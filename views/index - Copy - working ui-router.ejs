@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html  >
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>AngularUI - Tour Demo</title>
+  <base href=".."></base> 
+  <link rel="stylesheet" href="demo/bootstrap.css">
+  <script type="text/javascript" src="demo/jquery.min.js"></script>
+  <script type="text/javascript" src="demo/angular.min.js"></script>
+   <script src="js/angular-ui-notification.js"></script>
+ <script src="assets/angular-ui-router.js"></script>
+ <script src="assets/js/angular-cookies/angular-cookies.js"></script>
+  <script type="text/javascript" src="src/tour.js"></script>
+     <link rel="stylesheet" type="text/css" href="app.css">
+	 
+	 <script src="app.js"></script>
+	 
+  <style>
+  
+  /*
+    [ui-tour] li.active {
+      display: block;
+      position: absolute;
+      background: blue;
+      color: white;
+      padding: 20px;
+      margin-top: 10px;
+      
+    }
+    [ui-tour] li.active div {
+      position: relative;
+      margin: -20px;
+      padding: 20px;
+    }
+    [ui-tour] li.active div:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 50%;
+      top: -10px;
+      margin-left: -5px;
+      width: 0;
+      height: 0;
+      border-bottom: 10px solid black;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+    [ui-tour] li.active[at=top] div:after {
+      border-top: 10px solid black;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+    [ui-tour] li.active[at=right] div:after {
+      left: -10px;
+      top: 50%;
+      margin-left: 0;
+      margin-top: -5px;
+      border-right: 10px solid black;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+    }
+    */
+    h1 { width: 50%; margin: 100px auto; text-align: center; background: lightblue; color: white;}
+
+    [ui-tour] > li {
+      display: none;
+    }
+    .active {
+      display: block !important;
+    }
+    .tour-overlay {
+      display: none;
+      height: 500px;
+      width: 500px;
+      top: -4100px;
+      left: -4100px;
+      background: transparent;
+      border-radius: 8000px;
+      border: 4000px solid rgba(0,0,0,.5);
+      position: fixed;
+      -webkit-transition: all 1s ease;
+      -moz-transition: all 1s ease;
+      -ms-transition: all 1s ease;
+      -o-transition: all 1s ease;
+      transition: all 1s ease;
+    }
+	.tour-overlay.in {
+		height: 300px;
+		width: 300px;
+		top: -4000px;
+		left: -4000px;
+	}
+  </style>
+</head>
+
+<body ng-app="ui.tour" ng-init="currentStep=1">
+<!--/
+will rename this class in bootstrap to navbarbaby
+
+ -->
+ 
+   <div id="main-contents"></div>
+  <div ui-view>
+  
+  </div>
+
+
+</body>
+
+<style>
+/*
+67. This is a common technique called a CSS reset. \
+Different browsers use different default margins,
+ causing sites to look different by margins. 
+ The * means "all elements" (a universal selector),
+ so we are setting all elements to have zero margins,
+ and zero padding, thus making them look 
+ the same in all browsers.Jan 4, 2012
+
+What does "*" mean in CSS? - Stack Overflow
+https://stackoverflow.com/questions/8715860/what-does-mean-in-css
+
+below i will comment it out just o see
+*/
+
+/*
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+*/
+
+
+/*
+.class targets the following element:
+
+/<div class="class"></div>
+
+#class targets the following element:
+
+<div id="class"></di
+*/
+#canvas {
+  width: 100vw;
+  height: 120vh;
+  background-image: radial-gradient(rgb(0,0,0), rgb(50, 50, 50));
+  position: relative;
+  z-index: -9999999;
+    top: 40%;
+}
+
+#canvas span {
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 9;
+}
+
+.bg-image {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  max-width: 100%;
+  opacity: .4;
+}
+
+.newStar {
+  display: block;
+  transition: 1s;
+  position: absolute;
+  z-index: 99;
+  border-radius: 10%;
+  background-image: radial-gradient(#fff, rgba(0,0,0,0)), 
+    linear-gradient(to right, rgba(0,0,0,0) 70%, #fff);
+  opacity: 1;
+}
+
+/*
+ starts https://codepen.io/artyom-ivanov/pen/QjOYbO
+*/
+
+.planet{
+  width:5vw;
+  height:5vw;
+  position:absolute;
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow: 0 0 60px -20px rgba(255, 189, 3, 0.72), -14px -15px 40px -10px rgba(255, 238, 191, 0.23);
+  left:50%;
+  top:50%;
+  z-index: 999;
+}
+.planet .mask{
+  width:100%;
+  height:100%;
+  position: absolute;
+  box-shadow:inset -10px -10px 40px #251303, inset 10px 10px 30px -10px rgba(255, 204, 159, 0.6);
+  border-radius:50%;
+}
+.planet .background{
+  animation: translateBackground 40s infinite linear;  
+  background:url(/starnightimages/mars.jpg) repeat-x;
+  width:5vw;
+  height:5vw;
+  position:absolute;
+  border-radius:50%;
+}
+.planetone{
+  width:5vw;
+  height:5vw;
+  position:absolute;
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow: 0 0 60px -20px rgba(255, 189, 3, 0.72), -14px -15px 40px -10px rgba(255, 238, 191, 0.23);
+  left:50%;
+  top:50%;
+  z-index: 999;
+}
+.planetone .maskone{
+  width:100%;
+  height:100%;
+  position: absolute;
+  box-shadow:inset -10px -10px 40px #251303, inset 10px 10px 30px -10px rgba(255, 204, 159, 0.6);
+  border-radius:50%;
+}
+.planetone .backgroundone{
+  animation: translateBackground 40s infinite linear;  
+  background:url(/starnightimages/earththree.jpg) repeat-x;
+  width:5vw;
+  height:5vw;
+  position:absolute;
+  border-radius:50%;
+}
+.planet .clouds{
+  background:url(/starnightimages/clouds.png) repeat-x;
+  width:5vw;
+  height:5vw;
+  position:absolute;
+  border-radius:50%;
+  animation: translateBackground 30s infinite linear;
+  opacity: 0.4;
+}
+.planet .wrap{
+  width:5vw;
+  height:5vw;
+  position:absolute;
+  border-radius:50%;
+  animation: rotatePlanet 150s infinite linear;  
+}
+
+
+/* Split the screen in half */
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-color: #111;
+}
+
+/* Control the right side */
+.right {
+ left: 70%;
+  background-color: black;
+    position: absolute;
+  top: 30%;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 30%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Style the image inside the centered container, if needed */
+.centered img {
+  width: 150px;
+  border-radius: 50%;
+}
+
+
+#col-1 {
+  position: relative;
+  width: 50%;
+  float: left;
+  height: 100%;
+  background-color: #282828;
+  z-index: 1010101010
+}
+
+#col-2 {
+  position: relative;
+  width: 50%;
+  float: left;
+  height: 100%;
+  background-color: #0080ff;
+  z-index: 1010101010
+}
+
+@keyframes translateBackground{
+  0%{
+    background-position-x:0;
+  }
+  100%{
+    background-position-x:-600px;
+  }
+}
+@keyframes rotatePlanet{
+  0%{
+    transform:rotateZ(0);
+  }
+  100%{
+    transform:rotateZ(-360deg);
+  }
+}
+
+.rotate-element {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2vw;
+  height: 2vw;
+  background-image: url('/starnightimages/PngItem_300429.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  animation: rotate 5s linear infinite;
+  
+  transform-style: preserve-3d;
+  
+}
+
+@keyframes rotate{
+  0%{
+    transform: rotateY(0deg) translateX(7vw) translateZ(0);
+    z-index: 9999;
+  }
+  25% {
+    transform: rotateY(90deg) translateX(0) translateZ(0%);
+    z-index: 9999;
+  }
+  50% {
+    transform: rotateY(180deg) translateX(-5vw) translateZ(0%);
+  }
+  
+  75% {
+    transform: rotateY(270deg) translateX(0%) translateZ(0%);
+  }
+  100%{
+    transform: rotateY(360deg) translateX(7vw) translateZ(0);
+  }
+}
+
+
+
+</style>
+<script>
+const el = document.getElementById("canvas");
+const width = el.offsetWidth;
+const height = el.offsetHeight;
+
+function drawStars(num) {
+  for (let i = 0; i < num; i++) {
+    let s = Math.floor(Math.random() * 2 + 1);
+    let t = Math.floor(Math.random() * height);
+    let l = Math.floor(Math.random() * width);
+    
+    t = t - s;
+    l = l - s;
+    
+    let e = document.createElement("span");
+    e.style.width = s + "px";
+    e.style.height = s + "px";
+    e.style.left = l + "px";
+    e.style.top = t + "px";
+    el.appendChild(e);
+  }
+}
+
+
+function fallingStar() {
+  setInterval(function() {
+  let star = document.createElement("div");
+  let s = Math.floor(Math.random() * 4 + 1);
+  let t = Math.floor(Math.random() * height);
+  let r = Math.floor(Math.random() * width);
+  let l = 150;
+  let a = width + 50;
+  
+  star.style.width = l + "px";
+  star.style.height = s + "px";
+  star.style.top = t + "px";
+  star.style.left = "-" + l + "px";
+  star.classList.add("newStar");
+    
+  const deltaY = r - t;
+  const deltaX = a - l;
+  const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+  const transform = `rotate(${angle}deg)`
+  
+  star.style.transform = transform;
+  
+  el.appendChild(star);
+  
+  let start = Date.now(); // remember start time
+  let duration = 30000;
+  let removeTime = duration + 200;
+let timer = setInterval(function() {
+  // how much time passed from the start?
+  let timePassed = Date.now() - start;
+
+  if (timePassed >= duration) {
+    clearInterval(timer);
+    return;
+  }
+
+  // draw the animation at the moment timePassed
+  draw(duration);
+
+}, 20);
+
+
+function draw() {
+  star.style.left = a +'px'; 
+  star.style.top = r + "px";
+}
+    
+  setTimeout(function() {
+    el.removeChild(star);
+  }, removeTime)
+  }, 3000)
+ }
+
+drawStars(150);
+fallingStar();
+</script>
+
+
+</html>
